@@ -1,0 +1,162 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+enum Country {
+  AMERICA
+  INDIA
+}
+
+input CreateOrderInput {
+  items: [OrderItemInput!]!
+  restaurantId: String!
+}
+
+input CreatePaymentMethodInput {
+  cardHolder: String!
+  cardNumber: String!
+  expiryMonth: Int!
+  expiryYear: Int!
+  isDefault: Boolean! = false
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type LoginResponse {
+  token: String!
+  user: User!
+}
+
+type MenuItem {
+  category: String!
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  imageUrl: String
+  isAvailable: Boolean!
+  name: String!
+  price: Float!
+  restaurantId: String!
+  updatedAt: DateTime!
+}
+
+type Mutation {
+  cancelOrder(id: String!): Order!
+  createOrder(input: CreateOrderInput!): Order!
+  createPaymentMethod(input: CreatePaymentMethodInput!): PaymentMethod!
+  deletePaymentMethod(id: String!): Boolean!
+  login(email: String!, password: String!): LoginResponse!
+  processPayment(input: ProcessPaymentInput!): Payment!
+  updatePaymentMethod(id: String!, input: UpdatePaymentMethodInput!): PaymentMethod!
+}
+
+type Order {
+  createdAt: DateTime!
+  id: String!
+  orderItems: [OrderItem!]!
+  payment: Payment
+  restaurant: Restaurant
+  restaurantId: String!
+  status: OrderStatus!
+  totalAmount: Float!
+  updatedAt: DateTime!
+  user: User
+  userId: String!
+}
+
+type OrderItem {
+  id: String!
+  menuItem: MenuItem
+  menuItemId: String!
+  price: Float!
+  quantity: Float!
+}
+
+input OrderItemInput {
+  menuItemId: String!
+  quantity: Int!
+}
+
+enum OrderStatus {
+  CANCELLED
+  CONFIRMED
+  DELIVERED
+  PENDING
+  PREPARING
+}
+
+type Payment {
+  amount: Float!
+  createdAt: DateTime!
+  id: String!
+  order: Order
+  orderId: String!
+  paymentMethod: PaymentMethod
+  paymentMethodId: String!
+}
+
+type PaymentMethod {
+  cardHolder: String!
+  cardNumber: String!
+  createdAt: DateTime!
+  expiryMonth: Int!
+  expiryYear: Int!
+  id: String!
+  isDefault: Boolean!
+  updatedAt: DateTime!
+  userId: String!
+}
+
+input ProcessPaymentInput {
+  orderId: String!
+  paymentMethodId: String!
+}
+
+type Query {
+  me: User!
+  menuItems(restaurantId: String!): [MenuItem!]!
+  order(id: String!): Order!
+  orders: [Order!]!
+  paymentMethods: [PaymentMethod!]!
+  restaurant(id: String!): Restaurant
+  restaurants: [Restaurant!]!
+}
+
+type Restaurant {
+  address: String!
+  country: Country!
+  createdAt: DateTime!
+  description: String!
+  id: String!
+  imageUrl: String
+  menuItems: [MenuItem!]
+  name: String!
+  updatedAt: DateTime!
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  MEMBER
+}
+
+input UpdatePaymentMethodInput {
+  cardHolder: String
+  cardNumber: String
+  expiryMonth: Int
+  expiryYear: Int
+  isDefault: Boolean
+}
+
+type User {
+  country: Country!
+  createdAt: DateTime!
+  email: String!
+  id: String!
+  name: String!
+  role: Role!
+  updatedAt: DateTime!
+}
